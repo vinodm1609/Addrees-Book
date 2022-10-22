@@ -1,7 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateRegisterDto {
+  static password(password: any, salt: any) {
+    throw new Error('Method not implemented.');
+  }
   @ApiProperty({
     description: 'name of the User',
     example: 'vinod',
