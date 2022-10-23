@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 
 import { ContactDto } from './dto/addContacts.dto';
 import { UpdateContactDTO } from './dto/updateContact.dto';
@@ -13,7 +13,7 @@ import { IUser } from '../user/interface/register.interface';
 export class ContactService {
   constructor(
     @InjectModel(Contact.name)
-    private readonly contact: Model<ContactDocument>,
+    private readonly contact: PaginateModel<ContactDocument>,
   ) {}
 
   //Add a new contact.
@@ -47,14 +47,15 @@ export class ContactService {
   }
 
   async findCOntactPagination(page: number, limit: number, user: any) {
-    const contact = await this.contact
-      .find({ user: user._id })
-      .skip(page * limit)
-      .limit(limit)
-      .sort({ _id: 1 })
-      .exec();
+    const contact = await this.contact.paginate(
+      { user: user._id },
+      {
+        page,
+        limit,
+      },
+    );
 
-    return { contact, total: contact.length };
+    return { contact };
   }
 
   async searchContact(search: string, _user) {

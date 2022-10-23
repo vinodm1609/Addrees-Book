@@ -46,8 +46,6 @@ export class ContactController {
   @ApiResponse({ status: 415, description: SwaggerConstant.InvalidContentType })
   @ApiResponse({ status: 500, description: SwaggerConstant.SomethingWentWrong })
   @Post()
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async addContact(
     @Body() addContactDto: ContactDto,
     @Req() request,
