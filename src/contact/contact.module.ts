@@ -1,5 +1,4 @@
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from './../user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { ContactController } from './contact.controller';
@@ -10,7 +9,17 @@ import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Contact.name, schema: ContactSchema }]),
+    MongooseModule.forFeatureAsync([
+      {
+        name: Contact.name,
+        useFactory: () => {
+          const schema = ContactSchema;
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          schema.plugin(require('mongoose-paginate'));
+          return schema;
+        },
+      },
+    ]),
     UserModule,
   ],
   controllers: [ContactController],
